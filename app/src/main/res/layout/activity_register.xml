@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_login">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_margin="40dp"
+        android:background="#66CDAA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_margin="15dp"
+            android:background="#66CDAA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/rg_account"
+                style="@style/login_control"
+                android:text="B16041735"
+                android:hint="账号"/>
+            <EditText
+                android:id="@+id/rg_password"
+                style="@style/login_control"
+                android:text="555555"
+                android:hint="密码"/>
+            <Button
+                android:id="@+id/rg_register"
+                style="@style/login_control"
+                android:text="注册"/>
+            <RadioGroup
+                android:id="@+id/rg_radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rg_student"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="学生"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/rg_teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="教师"/>
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
