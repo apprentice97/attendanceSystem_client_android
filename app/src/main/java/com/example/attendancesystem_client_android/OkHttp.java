@@ -1,6 +1,11 @@
 package com.example.attendancesystem_client_android;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,16 +22,26 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OkHttp {
-
-    public static boolean login(String url, String account, String password, int type){
-        MediaType JSON = MediaType.parse("application/json, charset=utf-8");
+    public static void login(String account, String password, int type, Intent intent, Activity activity){
+        Log.e("login_type", String.valueOf(type));
+        String json, url;
         OkHttpClient client = new OkHttpClient();
-        String json = "{\"action\": \"student_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
+        MediaType JSON = MediaType.parse("application/json, charset=utf-8");
+        if(type == 1){
+            json = "{\"action\": \"student_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
+            url = "http://192.168.137.1/mgr/student/";
+        }
+        else if(type == 2){
+            json = "{\"action\": \"teacher_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
+            url = "http://192.168.137.1/mgr/teacher/";
+        }
+        else{
+            json = "{\"action\": \"manager_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
+            url = "http://192.168.137.1/mgr/manager/";
+        }
+        Log.e("login", url + json);
         RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url("http://192.168.137.1/mgr/student/")
-                .post(body)
-                .build();
+        Request request = new Request.Builder().url(url).post(body).build();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
@@ -36,17 +51,31 @@ public class OkHttp {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.isSuccessful()){
-                    String result = response.body().string();
-                    JSONObject ret = null;
                     try {
+                        assert response.body() != null;
+                        String result = response.body().string();
+                        JSONObject ret = null;
                         ret = new JSONObject(result);
+                        if(String.valueOf(ret.get("ret")).equals("0")){
+                            activity.startActivity(intent);
+                        }
+                        else if(String.valueOf(ret.get("ret")).equals("1")){
+                            Looper.prepare();
+                            Toast.makeText(activity, "账号或密码错误！", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                        }
+                        else{
+                            Log.e("login", String.valueOf(ret.get("ret")));
+                            Looper.prepare();
+                            Toast.makeText(activity, "账号不存在！", Toast.LENGTH_LONG).show();
+                            Looper.loop();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-        return false;
     }
     public static void getSyn(final String url) {
         new Thread(new Runnable() {

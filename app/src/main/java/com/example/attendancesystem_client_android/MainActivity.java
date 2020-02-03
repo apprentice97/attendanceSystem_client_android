@@ -1,36 +1,20 @@
 package com.example.attendancesystem_client_android;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.attendancesystem_client_android.manager.ManagerMain;
 import com.example.attendancesystem_client_android.student.StudentMain;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
+import com.example.attendancesystem_client_android.teacher.TeacherMain;
 import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     EditText et_account;
@@ -60,52 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_manager = findViewById(R.id.rbManager);
     }
 
-    private void login(String url, String account, String password){
-        MediaType JSON = MediaType.parse("application/json, charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String json = "{\"action\": \"student_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful()){
-                    String result = response.body().string();
-                    JSONObject ret = null;
-                    try {
-                        ret = new JSONObject(result);
-                        if(String.valueOf(ret.get("ret")).equals("0")){
-                            Intent intent = new Intent("android.intent.action.MAIN");
-                            intent.setClass(MainActivity.this, StudentMain.class);
-                            startActivity(intent);
-                        }
-                        else{
-                            Looper.prepare();
-                            Toast.makeText(MainActivity.this, "账号或密码错误！", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onClick(View view) {
         if(view == btn_login){
             boolean internet = false;
             ConnectivityManager cm = (ConnectivityManager) getApplicationContext() .getSystemService(Context.CONNECTIVITY_SERVICE);
+            assert cm != null;
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null) { // connected to the internet
                 if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
@@ -113,25 +57,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                     internet = true;
                 }
-            } else {
-                internet = false;
             }
             if(internet){
                 GlobalVariable.getInstance().setAccount(String.valueOf(et_account.getText()));
                 GlobalVariable.getInstance().setPassword(String.valueOf(et_password.getText()));
+                GlobalVariable.getInstance().setType(getType());
                 String account =  GlobalVariable.getInstance().getAccount();
                 String password =  GlobalVariable.getInstance().getPassword();
-                if(rb_student.isChecked()){
-                    GlobalVariable.getInstance().setType(1);
-                    login("http://192.168.137.1/mgr/student/", account, password);
+                int type = GlobalVariable.getInstance().getType();
+                Intent intent = new Intent("android.intent.action.MAIN");
+                if(type == 1){
+                    intent.setClass(MainActivity.this, StudentMain.class);
+                    OkHttp.login(account, password, 1,intent, this);
                 }
-                else if(rb_teacher.isChecked()){
-                    GlobalVariable.getInstance().setType(2);
-                    login("http://192.168.137.1/mgr/teacher/", account, password);
+                else if(type == 2){
+                    intent.setClass(MainActivity.this, TeacherMain.class);
+                    OkHttp.login(account, password, 2,intent, this);
                 }
-                else if(rb_manager.isChecked()){
-                    GlobalVariable.getInstance().setType(3);
-                    login("http://192.168.137.1/mgr/manager/", account, password);
+                else if(type == 3){
+                    intent.setClass(MainActivity.this, ManagerMain.class);
+                    OkHttp.login(account, password, 3,intent, this);
                 }
             }
             else{
@@ -141,7 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(view == tv_register){
             Intent intent = new Intent("android.intent.action.MAIN");
             intent.setClass(MainActivity.this, Register.class);
-            startActivity(intent);
+            //startActivity(intent);
         }
+    }
+
+    int getType(){
+        if(rb_student.isChecked()) return 1;
+        else if(rb_teacher.isChecked()) return 2;
+        else return 3;
     }
 }
