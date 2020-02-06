@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.manager.ManagerMain;
 import com.example.attendancesystem_client_android.student.StudentMain;
 import com.example.attendancesystem_client_android.teacher.TeacherMain;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
+        //Intent intent = new Intent("android.intent.action.MAIN");
+        //intent.setClass(MainActivity.this, StudentMain.class);
+        //startActivity(intent);
         bindView();
     }
 
@@ -47,46 +56,111 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view == btn_login){
-            boolean internet = false;
-            ConnectivityManager cm = (ConnectivityManager) getApplicationContext() .getSystemService(Context.CONNECTIVITY_SERVICE);
-            assert cm != null;
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork != null) { // connected to the internet
-                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                    internet = true;
-                } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    internet = true;
-                }
-            }
-            if(internet){
-                GlobalVariable.getInstance().setAccount(String.valueOf(et_account.getText()));
-                GlobalVariable.getInstance().setPassword(String.valueOf(et_password.getText()));
-                GlobalVariable.getInstance().setType(getType());
-                String account =  GlobalVariable.getInstance().getAccount();
-                String password =  GlobalVariable.getInstance().getPassword();
-                int type = GlobalVariable.getInstance().getType();
-                Intent intent = new Intent("android.intent.action.MAIN");
-                if(type == 1){
-                    intent.setClass(MainActivity.this, StudentMain.class);
-                    OkHttp.login(account, password, 1,intent, this);
-                }
-                else if(type == 2){
-                    intent.setClass(MainActivity.this, TeacherMain.class);
-                    OkHttp.login(account, password, 2,intent, this);
-                }
-                else if(type == 3){
-                    intent.setClass(MainActivity.this, ManagerMain.class);
-                    OkHttp.login(account, password, 3,intent, this);
-                }
-            }
-            else{
-                Toast.makeText(MainActivity.this, "请检查网络连接！", Toast.LENGTH_LONG).show();
-            }
+            login();
         }
         else if(view == tv_register){
             Intent intent = new Intent("android.intent.action.MAIN");
             intent.setClass(MainActivity.this, Register.class);
             //startActivity(intent);
+        }
+    }
+
+    void login(){
+        boolean internet = false;
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext() .getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                internet = true;
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                internet = true;
+            }
+        }
+        if(internet){
+            GlobalVariable.getInstance().setAccount(String.valueOf(et_account.getText()));
+            GlobalVariable.getInstance().setPassword(String.valueOf(et_password.getText()));
+            GlobalVariable.getInstance().setType(getType());
+            String account =  GlobalVariable.getInstance().getAccount();
+            String password =  GlobalVariable.getInstance().getPassword();
+            int type = GlobalVariable.getInstance().getType();
+            Intent intent = new Intent("android.intent.action.MAIN");
+            if(type == 1){
+                intent.setClass(MainActivity.this, StudentMain.class);
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("action", "student_login");
+                        map.put("account", account);
+                        map.put("password", password);
+                        OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/student/", map);
+                        assert response != null;
+                        Map content = (Map) JSONObject.parse(response.content);
+                        String code = Objects.requireNonNull(content.get("ret")).toString();
+                        if(code.equals("0")){
+                            startActivity(intent);
+                        }
+                        else if(code.equals("1")){
+                            ToastChildThread.show(MainActivity.this, "账号或密码错误！", Toast.LENGTH_LONG);
+                        }
+                        else if(code.equals("2")){
+                            ToastChildThread.show(MainActivity.this, "账号不存在！", Toast.LENGTH_LONG);
+                        }
+                    }
+                }).start();
+            }
+            else if(type == 2){
+                intent.setClass(MainActivity.this, TeacherMain.class);
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("action", "teacher_login");
+                        map.put("account", account);
+                        map.put("password", password);
+                        OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/teacher/", map);
+                        Map content = (Map) JSONObject.parse(response.content);
+                        String code = Objects.requireNonNull(content.get("ret")).toString();
+                        if(code.equals("0")){
+                            startActivity(intent);
+                        }
+                        else if(code.equals("1")){
+                            ToastChildThread.show(MainActivity.this, "账号或密码错误！", Toast.LENGTH_LONG);
+                        }
+                        else if(code.equals("2")){
+                            ToastChildThread.show(MainActivity.this, "账号不存在！", Toast.LENGTH_LONG);
+                        }
+                    }
+                }).start();
+            }
+            else if(type == 3){
+                intent.setClass(MainActivity.this, ManagerMain.class);
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("action", "manager_login");
+                        map.put("account", account);
+                        map.put("password", password);
+                        OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/manager/", map);
+                        Map content = (Map) JSONObject.parse(response.content);
+                        String code = Objects.requireNonNull(content.get("ret")).toString();
+                        if(code.equals("0")){
+                            startActivity(intent);
+                        }
+                        else if(code.equals("1")){
+                            ToastChildThread.show(MainActivity.this, "账号或密码错误！", Toast.LENGTH_LONG);
+                        }
+                        else if(code.equals("2")){
+                            ToastChildThread.show(MainActivity.this, "账号不存在！", Toast.LENGTH_LONG);
+                        }
+                    }
+                }).start();
+            }
+        }
+        else{
+            ToastChildThread.show(MainActivity.this, "请检查网络连接！", Toast.LENGTH_LONG);
         }
     }
 

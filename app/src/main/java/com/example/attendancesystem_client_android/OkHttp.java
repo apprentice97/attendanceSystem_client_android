@@ -1,132 +1,171 @@
 package com.example.attendancesystem_client_android;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Looper;
+import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+import static android.content.ContentValues.TAG;
 
 public class OkHttp {
-    public static void login(String account, String password, int type, Intent intent, Activity activity){
-        Log.e("login_type", String.valueOf(type));
-        String json, url;
-        OkHttpClient client = new OkHttpClient();
-        MediaType JSON = MediaType.parse("application/json, charset=utf-8");
-        if(type == 1){
-            json = "{\"action\": \"student_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
-            url = "http://192.168.137.1/mgr/student/";
-        }
-        else if(type == 2){
-            json = "{\"action\": \"teacher_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
-            url = "http://192.168.137.1/mgr/teacher/";
-        }
-        else{
-            json = "{\"action\": \"manager_login\", \"data\": {\"account\": \"" + account + "\",\"password\":\"" + password + "\"}}";
-            url = "http://192.168.137.1/mgr/manager/";
-        }
-        Log.e("login", url + json);
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder().url(url).post(body).build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful()){
-                    try {
-                        assert response.body() != null;
-                        String result = response.body().string();
-                        JSONObject ret = null;
-                        ret = new JSONObject(result);
-                        if(String.valueOf(ret.get("ret")).equals("0")){
-                            activity.startActivity(intent);
-                        }
-                        else if(String.valueOf(ret.get("ret")).equals("1")){
-                            Looper.prepare();
-                            Toast.makeText(activity, "账号或密码错误！", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                        }
-                        else{
-                            Log.e("login", String.valueOf(ret.get("ret")));
-                            Looper.prepare();
-                            Toast.makeText(activity, "账号不存在！", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-    public static void getSyn(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //创建OkHttpClient对象
-                    OkHttpClient client = new OkHttpClient();
-                    //创建Request
-                    Request request = new Request.Builder()
-                            .url(url)//访问连接
-                            .get()
-                            .build();
-                    //创建Call对象
-                    Call call = client.newCall(request);
-                    //通过execute()方法获得请求响应的Response对象
-                    Response response = call.execute();
-
-                    if (response.isSuccessful()) {
-                        //处理网络请求的响应，处理UI需要在UI线程中处理
-                        //...
-                        String result = response.body().string();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public static class Response {
+        public Integer code;
+        public String content;
     }
 
-    public static void post(){
-        MediaType JSON = MediaType.parse("application/json, charset=utf-8");
+    /**
+     * http get 请求
+     * @param url   请求uri
+     * @return      Response请求结果实例，通过response.code==200判断是否有效
+     */
+    public static Response httpGet(String url) {
+
+        Response response = new Response();
+
         OkHttpClient client = new OkHttpClient();
-        String json = "{\"action\": \"student_login\", \"data\": {\"account\": \"B16041735\",\"password\":\"555555\"}}";
-        RequestBody body = RequestBody.create(JSON, json);
+
         Request request = new Request.Builder()
-                .url("http://192.168.137.1/mgr/student/")
+                .url(url)
+                .build();
+
+        proceedRequest(client, request, response);
+
+        return response;
+    }
+
+    public static Response httpGetForm(String url, Map<String, String> para) {
+        if (para == null || para.size() == 0)
+            return null;
+
+        Response response = new Response();
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request.Builder reqBuild = new Request.Builder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+
+        for (Map.Entry<String, String> entry : para.entrySet()) {
+            urlBuilder.addQueryParameter(entry.getKey(),entry.getValue());
+        }
+
+        reqBuild.url(urlBuilder.build());
+
+        Request request = reqBuild.build();
+
+        proceedRequest(client, request, response);
+
+        return response;
+    }
+
+    private static void proceedRequest(OkHttpClient client, Request request, Response response) {
+        try {
+            okhttp3.Response temp = client.newCall(request).execute();
+            response.code = temp.code();
+            ResponseBody body = temp.body();
+            if (temp.isSuccessful()) {
+                //call string auto close body
+                response.content = body.string();
+            } else {
+                response.content = "网络请求失败";
+                temp.body().close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.w(TAG, e.getMessage() == null ? " " : e.getMessage());
+            response.code = -1;
+            response.content = e.getMessage();
+        }
+    }
+
+    /**
+     * http post 请求
+     * @param url       请求url
+     * @param jsonStr    post参数
+     * @return          Response请求结果实例，通过response.code==200判断
+     */
+    public static Response httpPost(String url, String jsonStr) {
+        Response response = new Response();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, jsonStr);
+        Request request = new Request.Builder()
+                .url(url)
                 .post(body)
                 .build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful()){
-                    String result = response.body().string();
-                }
-            }
-        });
+        proceedRequest(client, request, response);
+
+        return response;
+    }
+
+    /**
+     * http post 请求
+     * @param url       请求url
+     * @param para      post参数，表单键值对
+     * @return          HttpResponse请求结果实例
+     */
+    public static Response httpPostForm(String url, Map<String, String> para) {
+        if (para == null || para.size() == 0)
+            return null;
+
+        Response response = new Response();
+
+        OkHttpClient client = new OkHttpClient();
+
+        FormBody.Builder builder = new FormBody.Builder();
+
+
+        for (Map.Entry<String, String> entry : para.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        proceedRequest(client, request, response);
+
+        return response;
+    }
+
+    /**
+     * http put 请求
+     * @param url       请求url
+     * @param jsonStr    post参数
+     * @return          Response请求结果实例，通过response.code==200判断
+     */
+    public static Response httpPut(String url, String jsonStr) {
+        Response response = new Response();
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, jsonStr);
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+
+        proceedRequest(client, request, response);
+
+        return response;
     }
 }
+
+
+
