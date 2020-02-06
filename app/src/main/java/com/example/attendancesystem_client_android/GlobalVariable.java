@@ -6,6 +6,7 @@ public class GlobalVariable extends Application {
     private static GlobalVariable instance = null;
     private String account;
     private String password;
+    private String[] course;
     private int type;
 
     public int getType() {
