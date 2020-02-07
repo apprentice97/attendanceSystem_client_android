@@ -2,6 +2,8 @@ package com.example.attendancesystem_client_android.teacher;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,40 +12,46 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.example.attendancesystem_client_android.GlobalVariable;
+import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.bean.Course;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecyclerAdapter2.ViewHolder> {
     private LayoutInflater mInflater;
-    private String[] mTitles;
+    private List<String> mTitles=null;
     private  OnRecyclerItemClickListener onRecyclerItemClickListener;
 
+    public void to(){
+        Log.e("hahha", "hhahah");
+    }
 
-    /**
-     * 自定义RecyclerView 中item view点击回调方法
-     */
-    interface OnRecyclerItemClickListener{
-        /**
-         * item view 回调方法
-         * @param view  被点击的view
-         * @param position 点击索引
-         */
-        void onItemClick(View view, int position);
+    public TeacherRecyclerAdapter2(){
+
     }
 
     public TeacherRecyclerAdapter2(Context context, OnRecyclerItemClickListener onRecyclerItemClickListener){
         this.mInflater=LayoutInflater.from(context);
-        this.mTitles = new String[]{"暗裔剑魔亚托克斯","九尾妖狐阿狸","离群之刺阿卡丽",
-                "牛头酋长阿利斯塔","殇之木乃伊阿木木","冰晶凤凰艾尼维亚","黑暗之女安妮",
-                "寒冰射手艾希","铸星龙王奥瑞利安·索尔","沙漠皇帝阿兹尔","星界游神巴德",
-                "暗裔剑魔亚托克斯","九尾妖狐阿狸","离群之刺阿卡丽",
-                "牛头酋长阿利斯塔","殇之木乃伊阿木木","冰晶凤凰艾尼维亚","黑暗之女安妮",
-                "寒冰射手艾希","铸星龙王奥瑞利安·索尔","沙漠皇帝阿兹尔","星界游神巴德"};
+        this.mTitles = new ArrayList<String>();
+        this.mTitles.add("暗裔剑魔亚托克斯");
+        this.mTitles.add("九尾妖狐阿狸");
+        this.mTitles.add("离群之刺阿卡丽");
+        //this.mTitles = GlobalVariable.getInstance().getCourse();
         this.onRecyclerItemClickListener=onRecyclerItemClickListener;
     }
 
     public void setOnRecyclerItemClickListener(OnRecyclerItemClickListener onRecyclerItemClickListener) {
         this.onRecyclerItemClickListener = onRecyclerItemClickListener;
     }
+
 
     @NonNull
     @Override
@@ -64,14 +72,34 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.item_tv.setText(mTitles[position]);
+        holder.item_tv.setText(mTitles.get(position));
         holder.itemView.setTag(position);
     }
 
     @Override
     public int getItemCount() {
-        return mTitles.length;
+        return mTitles.size();
     }
+
+    public void addItem(String data, int position) {
+        mTitles.add(position, data);
+        notifyItemInserted(position);
+    }
+    //删除数据
+    public void removeItem(String data) {
+        int position = mTitles.indexOf(data);
+        mTitles.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void setData(List<Course> course) {
+        mTitles = new ArrayList<String>();
+        for(int i = 0; i < course.size(); i ++){
+            mTitles.add(course.get(i).toString());
+        }
+        notifyDataSetChanged();
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_tv;
@@ -79,5 +107,17 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
             super(view);
             item_tv = view.findViewById(R.id.t_f2_item);
         }
+    }
+
+    /**
+     * 自定义RecyclerView 中item view点击回调方法
+     */
+    interface OnRecyclerItemClickListener{
+        /**
+         * item view 回调方法
+         * @param view  被点击的view
+         * @param position 点击索引
+         */
+        void onItemClick(View view, int position);
     }
 }

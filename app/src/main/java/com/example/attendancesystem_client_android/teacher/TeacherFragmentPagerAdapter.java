@@ -2,6 +2,7 @@ package com.example.attendancesystem_client_android.teacher;
 
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -17,9 +18,10 @@ public class TeacherFragmentPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;
 
 
+
+
     public TeacherFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
-
         myFragment1 = new TeacherFragment1();
         myFragment2 = new TeacherFragment2();
         myFragment3 = new TeacherFragment3();

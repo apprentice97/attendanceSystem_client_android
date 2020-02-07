@@ -2,12 +2,24 @@ package com.example.attendancesystem_client_android;
 
 import android.app.Application;
 
+import com.example.attendancesystem_client_android.bean.Course;
+
+import java.util.List;
+
 public class GlobalVariable extends Application {
     private static GlobalVariable instance = null;
-    private String account;
-    private String password;
-    private String[] course;
+    private static String account;
+    private static String password;
+    private static List<Course> course;
     private int type;
+
+    public List<Course> getCourse() {
+        return course;
+    }
+
+    public void setCourse(List<Course> mCourse) {
+        course =mCourse;
+    }
 
     public int getType() {
         return type;
@@ -20,6 +32,7 @@ public class GlobalVariable extends Application {
     public static synchronized GlobalVariable getInstance(){
         if(null == instance){
             instance = new GlobalVariable();
+            course = null;
         }
         return instance;
     }
