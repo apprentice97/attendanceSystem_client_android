@@ -3,6 +3,7 @@ package com.example.attendancesystem_client_android.teacher;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,21 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
     private LayoutInflater mInflater;
     private List<String> mTitles=null;
     private  OnRecyclerItemClickListener onRecyclerItemClickListener;
+    private Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                //此处可以根据what的值处理多条信息
+                case 0x0001:
+                    notifyDataSetChanged();
+                case 0x0002:
+                    System.out.println("hello world");
+                    break;
+            }
+            return false;
+        }
+    });
 
     public void to(){
         Log.e("hahha", "hhahah");
@@ -41,9 +57,6 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
     public TeacherRecyclerAdapter2(Context context, OnRecyclerItemClickListener onRecyclerItemClickListener){
         this.mInflater=LayoutInflater.from(context);
         this.mTitles = new ArrayList<String>();
-        this.mTitles.add("暗裔剑魔亚托克斯");
-        this.mTitles.add("九尾妖狐阿狸");
-        this.mTitles.add("离群之刺阿卡丽");
         //this.mTitles = GlobalVariable.getInstance().getCourse();
         this.onRecyclerItemClickListener=onRecyclerItemClickListener;
     }
@@ -97,7 +110,9 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
         for(int i = 0; i < course.size(); i ++){
             mTitles.add(course.get(i).toString());
         }
-        notifyDataSetChanged();
+        Message message = new Message();
+        message.what = 0x0001;
+        handler.sendMessage(message);
     }
 
 

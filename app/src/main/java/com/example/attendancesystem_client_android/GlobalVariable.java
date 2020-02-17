@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.example.attendancesystem_client_android.bean.Course;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalVariable{
