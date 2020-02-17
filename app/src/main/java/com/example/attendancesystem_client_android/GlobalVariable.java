@@ -6,40 +6,15 @@ import com.example.attendancesystem_client_android.bean.Course;
 
 import java.util.List;
 
-public class GlobalVariable extends Application {
-    private static GlobalVariable instance = null;
-    private static String account;
-    private static String password;
-    private static List<Course> course;
+public class GlobalVariable{
+    private static GlobalVariable instance = new GlobalVariable();
+    private String account;
+    private String password;
+    private List<Course> course;
     private int type;
 
-    public List<Course> getCourse() {
-        return course;
-    }
-
-    public void setCourse(List<Course> mCourse) {
-        course =mCourse;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public static synchronized GlobalVariable getInstance(){
-        if(null == instance){
-            instance = new GlobalVariable();
-            course = null;
-        }
+    public static GlobalVariable getInstance() {
         return instance;
-    }
-
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
     }
 
     public String getAccount() {
@@ -56,5 +31,21 @@ public class GlobalVariable extends Application {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Course> getCourse() {
+        return course;
+    }
+
+    public void setCourse(List<Course> course) {
+        this.course = course;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
