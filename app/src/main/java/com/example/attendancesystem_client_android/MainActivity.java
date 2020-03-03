@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.manager.ManagerMain;
 import com.example.attendancesystem_client_android.student.StudentMain;
+import com.example.attendancesystem_client_android.teacher.TeacherCourse;
 import com.example.attendancesystem_client_android.teacher.TeacherMain;
 
 import java.util.HashMap;
@@ -35,9 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
-        //Intent intent = new Intent("android.intent.action.MAIN");
-        //intent.setClass(MainActivity.this, StudentMain.class);
-        //startActivity(intent);
+        //startActivity(new Intent(this, TeacherCourse.class));
         bindView();
     }
 

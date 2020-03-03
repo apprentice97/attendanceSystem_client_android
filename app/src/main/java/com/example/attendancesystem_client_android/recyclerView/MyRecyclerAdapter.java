@@ -1,22 +1,26 @@
-package com.example.attendancesystem_client_android.teacher;
+package com.example.attendancesystem_client_android.recyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.bean.Course;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecyclerAdapter2.ViewHolder> {
+
+public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private List<String> mTitles=null;
     private  OnRecyclerItemClickListener onRecyclerItemClickListener;
@@ -36,9 +40,12 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
         }
     });
 
-    public TeacherRecyclerAdapter2(Context context, OnRecyclerItemClickListener onRecyclerItemClickListener){
+    public MyRecyclerAdapter(Context context, OnRecyclerItemClickListener onRecyclerItemClickListener){
         this.mInflater=LayoutInflater.from(context);
         this.mTitles = new ArrayList<String>();
+//        for(int i = 0; i < 6; i ++){
+//            this.mTitles.add("teacher course " + i);
+//        }
         this.onRecyclerItemClickListener=onRecyclerItemClickListener;
     }
 
@@ -50,7 +57,7 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view=mInflater.inflate(R.layout.teacher_fragment_2_item, parent,false);
+        View view=mInflater.inflate(R.layout.my_recycler_view_item, parent,false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,19 +103,29 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
         handler.sendMessage(message);
     }
 
+    public void setDataString(List<String> course) {
+        mTitles = new ArrayList<String>();
+        for(int i = 0; i < course.size(); i ++){
+            mTitles.add(course.get(i));
+        }
+        Message message = new Message();
+        message.what = 0x0001;
+        handler.sendMessage(message);
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_tv;
         public ViewHolder(View view){
             super(view);
-            item_tv = view.findViewById(R.id.t_f2_item);
+            item_tv = view.findViewById(R.id.recycler_item);
         }
     }
 
     /**
      * 自定义RecyclerView 中item view点击回调方法
      */
-    interface OnRecyclerItemClickListener{
+    public interface OnRecyclerItemClickListener{
         /**
          * item view 回调方法
          * @param view  被点击的view

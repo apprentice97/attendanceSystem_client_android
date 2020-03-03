@@ -7,7 +7,7 @@
     >
     <TextView
         android:gravity="center_vertical|left"
-        android:id="@+id/t_f2_item"
+        android:id="@+id/recycler_item"
         android:textColor="@android:color/black"
         android:padding="5dp"
         android:textSize="16sp"

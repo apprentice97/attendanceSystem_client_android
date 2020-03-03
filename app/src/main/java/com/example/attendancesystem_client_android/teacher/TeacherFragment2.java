@@ -1,6 +1,7 @@
 package com.example.attendancesystem_client_android.teacher;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,9 +26,6 @@ import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.bean.Course;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +58,8 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
         recyclerViewAdapter = new TeacherRecyclerAdapter2(getActivity(), new TeacherRecyclerAdapter2.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view,int position) {
-                Toast.makeText(view.getContext(), "点击了第"+position+"项", Toast.LENGTH_LONG).show();
+                GlobalVariable.getInstance().setTeacher_course_id(position);
+                startActivity(new Intent(getActivity(), TeacherCourse.class));
             }
         });
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -82,6 +81,8 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
                 List<Course> courseList = JSON.parseArray(string, Course.class);
                 GlobalVariable.getInstance().setCourse(courseList);
                 recyclerViewAdapter.setData(courseList);
+
+
                 //将更新UI的操作放在runOnUiThread()....
 //                Objects.requireNonNull(getActivity()).runOnUiThread((new Runnable() {
 //                    public void run()

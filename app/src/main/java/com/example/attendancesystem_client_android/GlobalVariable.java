@@ -13,6 +13,25 @@ public class GlobalVariable{
     private String password;
     private List<Course> course;
     private int type;
+    private int teacher_course_id;
+
+    public int getTeacher_course_id() {
+        return teacher_course_id;
+    }
+
+    public void setTeacher_course_id(int teacher_course_id) {
+        this.teacher_course_id = teacher_course_id;
+    }
+
+    public int getTeacher_course_serial() {
+        return teacher_course_serial;
+    }
+
+    public void setTeacher_course_serial(int teacher_course_serial) {
+        this.teacher_course_serial = teacher_course_serial;
+    }
+
+    private int teacher_course_serial;
 
     public static GlobalVariable getInstance() {
         return instance;
