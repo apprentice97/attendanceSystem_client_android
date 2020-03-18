@@ -105,9 +105,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     public void setDataString(List<String> course) {
         mTitles = new ArrayList<String>();
-        for(int i = 0; i < course.size(); i ++){
-            mTitles.add(course.get(i));
-        }
+        mTitles.addAll(course);
         Message message = new Message();
         message.what = 0x0001;
         handler.sendMessage(message);

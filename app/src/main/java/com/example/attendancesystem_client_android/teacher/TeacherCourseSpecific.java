@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,8 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
-import com.example.attendancesystem_client_android.bean.Attendance;
-import com.example.attendancesystem_client_android.bean.CourseAttendance;
+import com.example.attendancesystem_client_android.bean.AttendanceStatistics;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
 import com.example.attendancesystem_client_android.recyclerView.MyRecyclerAdapter;
 
@@ -71,7 +69,7 @@ public class TeacherCourseSpecific extends AppCompatActivity  implements View.On
                 assert response != null;
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
-                List<Attendance> listClass = JSON.parseArray(string, Attendance.class);
+                List<AttendanceStatistics> listClass = JSON.parseArray(string, AttendanceStatistics.class);
                 List<String> list = new ArrayList<>();
                 for(int i = 0; i < listClass.size(); i ++){
                     list.add(listClass.get(i).toString());

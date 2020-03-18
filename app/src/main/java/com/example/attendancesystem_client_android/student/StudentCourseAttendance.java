@@ -1,4 +1,4 @@
-package com.example.attendancesystem_client_android.teacher;
+package com.example.attendancesystem_client_android.student;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -6,31 +6,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
-import com.example.attendancesystem_client_android.bean.Course;
-import com.example.attendancesystem_client_android.bean.CourseAttendance;
+import com.example.attendancesystem_client_android.bean.Attendance;
+import com.example.attendancesystem_client_android.bean.AttendanceStatistics;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
 import com.example.attendancesystem_client_android.recyclerView.MyRecyclerAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TeacherCourse extends AppCompatActivity implements View.OnClickListener{
+public class StudentCourseAttendance extends AppCompatActivity implements View.OnClickListener{
     private View view;
     private RecyclerView recyclerView;
     private MyRecyclerAdapter recyclerAdapter;
@@ -43,7 +39,6 @@ public class TeacherCourse extends AppCompatActivity implements View.OnClickList
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.teacher_course);
         bindView();
-        draw();
     }
 
 
@@ -57,7 +52,6 @@ public class TeacherCourse extends AppCompatActivity implements View.OnClickList
             @Override
             public void onItemClick(View view, int position) {
                 GlobalVariable.getInstance().setTeacher_course_serial(position + 1);
-                startActivity(new Intent(getApplication(), TeacherCourseSpecific.class));
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -71,24 +65,51 @@ public class TeacherCourse extends AppCompatActivity implements View.OnClickList
             public void run() {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("action", "course_attendance");
-                map.put("teacher_id", GlobalVariable.getInstance().getAccount());
-                map.put("course_id",GlobalVariable.getInstance().getCourse().get(GlobalVariable.getInstance().getTeacher_course_id()).getCourse_id());
-                OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/teacher/", map);
+                map.put("student_id", GlobalVariable.getInstance().getAccount());
+                map.put("course_id",GlobalVariable.getInstance().getCourse().get(GlobalVariable.getInstance().getStudent_course_id()).getCourse_id());
+                OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/student/", map);
                 assert response != null;
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
-                List<CourseAttendance> listClass = JSON.parseArray(string, CourseAttendance.class);
-                List<String> list = new ArrayList<>();
-                for(int i = 0; i < listClass.size(); i ++){
-                    list.add(listClass.get(i).getInformation());
-                }
+                List<Attendance> listClass = JSON.parseArray(string, Attendance.class);
+                List<String> list = new ArrayList<>(toListString(listClass));
                 recyclerAdapter.setDataString(list);
             }
         }).start();
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        draw();
+    }
+
+    @Override
     public void onClick(View v) {
 
+    }
+
+    private List<String> toListString(List<Attendance> listClass){
+        List<String> ret = new ArrayList<>();
+        for(int i = 0; i < listClass.size(); i ++){
+            String add = "";
+            if(listClass.get(i).getModify().equals("0")){
+                add = "未签到";
+            }
+            else if(listClass.get(i).getType().equals("0")){
+                add = "出勤";
+            }
+            else if(listClass.get(i).getType().equals("1")){
+                add = "病假";
+            }
+            else if(listClass.get(i).getType().equals("2")){
+                add = "事假";
+            }
+            else if(listClass.get(i).getType().equals("3")){
+                add = "缺勤";
+            }
+            ret.add(listClass.get(i).getTime() + "  课程号:" + listClass.get(i).getCourse_id() + "  第" +  listClass.get(i).getSerial_number() + "次点名  " + add);
+        }
+        return ret;
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <ImageView
+        android:text="相机预留位置！！！！！！！！！！！！"
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
+    <TextView
+        android:id="@+id/course_information"
+        android:layout_below="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <Spinner
+        android:id="@+id/type"
+        android:layout_below="@+id/course_information"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <Button
+        android:text="提交"
+        android:layout_below="@+id/type"
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+</RelativeLayout>

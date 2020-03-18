@@ -75,7 +75,7 @@ public class CourseAttendance {
     }
 
     public String getInformation(){
-        return  序号 + " 时间:" + 时间 + " 出勤:" +出勤 + " 病假:" + 病假 + " 事假:" + 事假 + " 缺勤:" + 缺勤 + " 应到:" + 应到;
+        return  序号 + " 时间:" + " 出勤:" +出勤 + " 病假:" + 病假 + " 事假:" + 事假 + " 缺勤:" + 缺勤 + " 应到:" + 应到;
     }
 
     public String get应到() {

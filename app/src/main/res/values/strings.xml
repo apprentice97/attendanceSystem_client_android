@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">考勤</string>
+    <string-array name="spinner_type_list">
+        <item>出勤</item>
+        <item>病假</item>
+        <item>事假</item>
+        <item>缺勤</item>
+    </string-array>
 </resources>

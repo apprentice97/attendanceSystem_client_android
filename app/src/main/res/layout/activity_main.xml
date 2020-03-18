@@ -23,7 +23,7 @@
                 android:id="@+id/et_account"
                 style="@style/login_control"
                 android:lines="1"
-                android:text="T040004"
+                android:text="B16041735"
                 android:hint="账号"/>
             <EditText
                 android:id="@+id/et_password"

@@ -36,6 +36,7 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private TeacherRecyclerAdapter2 recyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private boolean firstInstall = true;
 
     public  TeacherFragment2() { }
 
@@ -65,6 +66,7 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new TeacherDecoration2(view.getContext(),OrientationHelper.VERTICAL));
+        firstInstall = false;
     }
 
     private void draw(){
@@ -94,8 +96,18 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
         }).start();
     }
 
+    @Deprecated
+    public void setUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser && !firstInstall){
+            draw();
+        }
+        else{
+            //do nothing ...
+        }
+    }
+
     @Override
     public void onClick(View v) {
-
     }
 }

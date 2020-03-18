@@ -26,6 +26,17 @@ public class  TeacherFragment3 extends Fragment implements View.OnClickListener{
     private void draw(){
     }
 
+    @Deprecated
+    public void setUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            draw();
+        }
+        else{
+            //do nothing ...
+        }
+    }
+
     @Override
     public void onClick(View v) {
 
