@@ -7,13 +7,22 @@ import android.graphics.RectF;
 import android.os.Environment;
 import android.view.View;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class Picture {
+
+    public static Bitmap compressBitmap(Bitmap bitmap){
+        return Bitmap.createScaledBitmap(bitmap, 200, 300, true);
+    }
+
+
     /**
      * 质量压缩
      *
@@ -68,14 +77,22 @@ public class Picture {
     /**
      * 缩放压缩
      */
-    public static void compressScale(String originalPath, String targetPath) {
+    public static void compressScale(URL url, String targetPath){
 //        File sdFile = Environment.getExternalStorageDirectory();
 //        File originFile = new File(sdFile, "originImg.jpg");
 //        Bitmap bitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath());
-        File originFile = new File(originalPath);
-        Bitmap bitmap = BitmapFactory.decodeFile(originFile.getAbsolutePath());
-        System.out.println(originalPath);
-        System.out.println(originFile.getName());
+//        File originFile = new File(originalPath);
+//        Bitmap bitmap = BitmapFactory.decodeFile(originalPath);
+//        System.out.println(originalPath);
+//        System.out.println(originFile.getName());
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //设置缩放比
         int radio = 8;
         Bitmap result = Bitmap.createBitmap(bitmap.getWidth() / radio, bitmap.getHeight() / radio, Bitmap.Config.ARGB_8888);

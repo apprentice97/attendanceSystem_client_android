@@ -10,6 +10,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,13 @@ import static android.content.ContentValues.TAG;
 
 public class Question {
     public static void main(String[] args){
-        Picture.compressScale("C:\\Users\\19093\\Desktop\\myImage.jpg","C:\\Users\\19093\\Desktop\\newImage.jpg");
+        try {
+            URL url = new URL("C:\\Users\\19093\\Desktop\001.jpg");
+            Picture.compressScale(url,"C:\\Users\\19093\\Desktop\\newImage.jpg");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

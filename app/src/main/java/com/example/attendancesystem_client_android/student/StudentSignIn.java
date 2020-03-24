@@ -176,7 +176,6 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
         GlobalVariable.getInstance().setFile(outputImage);
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        //Picture.compressScale(imageUri.getPath(),imageUri.getPath());   todo 压缩图片
         startActivityForResult(intent, 0);
 
 
@@ -192,7 +191,9 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
                     try {
                         //将拍摄的照片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        imageView.setImageBitmap(bitmap);
+                        Bitmap compressBitmap = Picture.compressBitmap(bitmap);
+                        bitmapSaveToNative(compressBitmap);
+                        imageView.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -200,6 +201,19 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
                 break;
             default:
                 break;
+        }
+    }
+
+
+    private void bitmapSaveToNative(Bitmap bitmap){
+        File f = new File(getExternalCacheDir(), "output_image.jpg");
+        try{
+          FileOutputStream out = new FileOutputStream(f);
+          bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+          out.flush();
+          out.close();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
