@@ -19,7 +19,26 @@ public class GlobalVariable{
     private int student_course_id;
     private int student_position;
     private List<Attendance> student_message;
+
     private File file;
+    private String student_name;
+    private String student_class_id;
+
+    public String getStudent_name() {
+        return student_name;
+    }
+
+    public void setStudent_name(String student_name) {
+        this.student_name = student_name;
+    }
+
+    public String getStudent_class_id() {
+        return student_class_id;
+    }
+
+    public void setStudent_class_id(String student_class_id) {
+        this.student_class_id = student_class_id;
+    }
 
     public File getFile() {
         return file;
@@ -107,5 +126,13 @@ public class GlobalVariable{
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getUrlStudent() {
+        return "http://192.168.137.1/mgr/student/";
+    }
+
+    public String getUrlTeacher() {
+        return "http://192.168.137.1/mgr/teacher/";
     }
 }

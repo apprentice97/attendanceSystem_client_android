@@ -6,9 +6,10 @@
     android:background="@android:color/holo_green_light"
     >
     <TextView
-        android:gravity="center_vertical|left"
+
         android:id="@+id/recycler_item"
         android:textColor="@android:color/black"
+        android:gravity="center_vertical|left"
         android:padding="5dp"
         android:textSize="16sp"
         android:singleLine="true"

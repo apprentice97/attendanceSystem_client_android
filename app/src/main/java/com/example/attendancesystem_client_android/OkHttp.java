@@ -3,6 +3,7 @@ package com.example.attendancesystem_client_android;
 import android.os.Build;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.bean.Attendance;
 
 import java.io.File;
@@ -79,6 +80,14 @@ public class OkHttp {
             if (temp.isSuccessful()) {
                 //call string auto close body
                 response.content = body.string();
+                Map content = (Map) JSONObject.parse(response.content);
+                String code = Objects.requireNonNull(content.get("ret")).toString();
+                if(code.equals("500")){
+                    Log.e("OkHttp","服务器内部错误！");
+                }
+                else if(code.equals("400")){
+                    Log.e("OkHttp","请求无效！");
+                }
             } else {
                 response.content = "网络请求失败";
                 temp.body().close();

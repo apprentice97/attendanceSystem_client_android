@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.ToastChildThread;
 import com.example.attendancesystem_client_android.bean.Course;
 import com.example.attendancesystem_client_android.bean.CourseAttendance;
 
@@ -30,6 +33,7 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
     private LayoutInflater mInflater;
     private List<String> mTitles=null;
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
+    private Context context;
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -76,6 +80,7 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
     //构造函数
     public TeacherRecyclerAdapter2(Context context, OnRecyclerItemClickListener onRecyclerItemClickListener){
         this.mInflater=LayoutInflater.from(context);
+        this.context = context;
         this.mTitles = new ArrayList<String>();
         this.onRecyclerItemClickListener=onRecyclerItemClickListener;
     }
@@ -93,13 +98,6 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
             }
         });
         ViewHolder viewHolder = new ViewHolder(view);
-//        viewHolder.courseInformation.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                int position = viewHolder.getPosition();
-//                Log.e("courseInformation", "" + position);
-//            }
-//        });
         viewHolder.callName.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -114,6 +112,7 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
                         map.put("teacher_id", GlobalVariable.getInstance().getAccount());
                         map.put("course_id",GlobalVariable.getInstance().getCourse().get(GlobalVariable.getInstance().getTeacher_course_id()).getCourse_id());
                         OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/teacher/", map);
+                        ToastChildThread.show(context,"点名成功",0);
                     }
                 }).start();
             }

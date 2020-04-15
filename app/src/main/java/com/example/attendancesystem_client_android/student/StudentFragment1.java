@@ -84,7 +84,6 @@ public class StudentFragment1 extends Fragment implements View.OnClickListener{
         recyclerAdapter = new MyRecyclerAdapter(getContext(), new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //todo 设置当前点的课程号和点名次数
                 GlobalVariable.getInstance().setStudent_position(position);
                 startActivityForResult(new Intent(getContext(), StudentSignIn.class), 0);
             }

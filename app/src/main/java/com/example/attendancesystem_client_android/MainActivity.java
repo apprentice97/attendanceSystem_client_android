@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,11 +93,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         map.put("action", "student_login");
                         map.put("account", account);
                         map.put("password", password);
-                        OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/student/", map);
+                        OkHttp.Response response = OkHttp.httpPostForm("http://192.168.137.1/mgr/student/", map);
                         assert response != null;
                         Map content = (Map) JSONObject.parse(response.content);
                         String code = Objects.requireNonNull(content.get("ret")).toString();
+                        Log.e("MainActivity", response.content);
                         if(code.equals("0")){
+                            map = new HashMap<String, String>();
+                            map.put("action", "student_get_self_info");
+                            map.put("student_id", account);
+                            response = OkHttp.httpPostForm("http://192.168.137.1/mgr/student/", map);
+                            assert response != null;
+                            content = (Map) JSONObject.parse(response.content);
+                            String student_name = Objects.requireNonNull(content.get("student_name")).toString();
+                            String student_class_id = Objects.requireNonNull(content.get("student_class_id")).toString();
+                            GlobalVariable.getInstance().setStudent_name(student_name);
+                            GlobalVariable.getInstance().setStudent_class_id(student_class_id);
+
                             startActivity(intent);
                         }
                         else if(code.equals("1")){

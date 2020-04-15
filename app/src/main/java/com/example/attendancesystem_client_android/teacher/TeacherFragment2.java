@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.ToastChildThread;
 import com.example.attendancesystem_client_android.bean.Course;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,6 @@ public class  TeacherFragment2 extends Fragment implements View.OnClickListener{
                 List<Course> courseList = JSON.parseArray(string, Course.class);
                 GlobalVariable.getInstance().setCourse(courseList);
                 recyclerViewAdapter.setData(courseList);
-
 
                 //将更新UI的操作放在runOnUiThread()....
 //                Objects.requireNonNull(getActivity()).runOnUiThread((new Runnable() {

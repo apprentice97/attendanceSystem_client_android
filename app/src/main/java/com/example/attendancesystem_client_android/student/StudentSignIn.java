@@ -1,17 +1,25 @@
 package com.example.attendancesystem_client_android.student;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -22,12 +30,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
+import com.example.attendancesystem_client_android.MainActivity;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.Picture;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.ToastChildThread;
 import com.example.attendancesystem_client_android.bean.Attendance;
 import com.example.attendancesystem_client_android.bean.Course;
 
@@ -51,11 +62,13 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
     private int type;
     private ImageView imageView;
     private Uri imageUri = null;
+    private Boolean takenPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_sign_in);
+        takenPhoto=false;
         bindView();
         draw();
     }
@@ -77,8 +90,6 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
         imageView = findViewById(R.id.camera);
         imageView.setOnClickListener(this);
         //spinner_type.setOnItemClickListener(this);
-
-
     }
     private void draw(){
         runOnUiThread(new Runnable() {
@@ -88,23 +99,6 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
                 String text = "课程号:" +  attendance.getCourse_id() + "    课程名:" + attendance.getCourse_name() + "    第" +
                         attendance.getSerial_number() + "次点名";
                 textView.setText(text);
-//                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
-//                if (Build.VERSION.SDK_INT >= 24) {
-//                    imageUri = FileProvider.getUriForFile(getApplicationContext(),
-//                            "com.example.cameraalbumtest.fileprovider", outputImage);
-//                } else {
-//                    imageUri = Uri.fromFile(outputImage);
-//                }
-//                Log.e("StudentSignIn...", imageUri.getPath());
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                Log.e("StudentSignIn...", imageUri.getPath());
-//                imageView.setImageBitmap(bitmap);
-//                Log.e("StudentSignIn...", imageUri.getPath());
             }
         });
     }
@@ -112,36 +106,24 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onClick(View v) {
         if(v == submit){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Attendance attendance = GlobalVariable.getInstance().getStudent_message().get(GlobalVariable.getInstance().getStudent_position());
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("action", "student_sign_in");
-                    map.put("student_id", attendance.getStudent_id());
-                    map.put("course_id", attendance.getCourse_id());
-                    map.put("teacher_id", attendance.getTeacher_id());
-                    map.put("serial_number", attendance.getSerial_number());
-                    map.put("type",""+type);
-
-                    OkHttp.Response response;
-                    if(imageUri == null){
-                        response = OkHttp.httpGetForm("http://192.168.137.1/mgr/student/", map);
-                    }
-                    else{
-                        response = OkHttp.httpPostForm("http://192.168.137.1/mgr/student/", map, imageUri.getPath());
-                    }
-                    assert response != null;
-                    Map content = (Map) JSONObject.parse(response.content);
-                    String string = Objects.requireNonNull(content.get("data")).toString();
-                    Log.e("StudentSign",string);
-                    setResult(0,new Intent());
-                    finish();
+            if(type == 0){
+                if(takenPhoto){
+                    attendanceWithPhoto();
                 }
-            }).start();
+                else{
+                    Toast.makeText(this, "请先拍照!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else{
+                attendanceWithOutPhoto();
+            }
         }
         else if(v == imageView){
-            takePhoto();
+            createUploadFile();
+//            takePhoto();
+            // todo 改成从相机选择照片
+            takenPhoto = true;
+            getPhotoFromAlbum();
         }
     }
 
@@ -155,8 +137,35 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
         type = 0;
     }
 
-    private void takePhoto(){
-        //创建File对象，用于储存拍照后的图片
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        switch (requestCode) {
+            case 0:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        takenPhoto = true;
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        Bitmap compressBitmap = Picture.compressBitmap(bitmap);
+                        bitmapSaveToNative(compressBitmap);
+                        imageView.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    assert data != null;
+                    handleImageOnKitKat(data);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void createUploadFile(){
         File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
         try {
             if (outputImage.exists()) {
@@ -172,36 +181,7 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
         } else {
             imageUri = Uri.fromFile(outputImage);
         }
-        //启动相机程序
         GlobalVariable.getInstance().setFile(outputImage);
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, 0);
-
-
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
-                    try {
-                        //将拍摄的照片显示出来
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        Bitmap compressBitmap = Picture.compressBitmap(bitmap);
-                        bitmapSaveToNative(compressBitmap);
-                        imageView.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
     }
 
 
@@ -213,6 +193,122 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
           out.flush();
           out.close();
         } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private void takePhoto(){
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, 0);
+    }
+
+    private void attendanceWithPhoto(){
+        new Thread(() -> {
+            Attendance attendance = GlobalVariable.getInstance().getStudent_message().get(GlobalVariable.getInstance().getStudent_position());
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("action", "student_sign_in");
+            map.put("student_id", attendance.getStudent_id());
+            map.put("course_id", attendance.getCourse_id());
+            map.put("teacher_id", attendance.getTeacher_id());
+            map.put("serial_number", attendance.getSerial_number());
+            map.put("type",""+type);
+            OkHttp.Response response = OkHttp.httpPostForm("http://192.168.137.1/mgr/student/", map, imageUri.getPath());
+            assert response != null;
+            Map content = (Map) JSONObject.parse(response.content);
+            String string = Objects.requireNonNull(content.get("data")).toString();
+            Log.e("StudentSign",string);
+            setResult(0,new Intent());
+            finish();
+        }).start();
+    }
+
+    private void attendanceWithOutPhoto(){
+        new Thread(() -> {
+            Attendance attendance = GlobalVariable.getInstance().getStudent_message().get(GlobalVariable.getInstance().getStudent_position());
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("action", "student_sign_in");
+            map.put("student_id", attendance.getStudent_id());
+            map.put("course_id", attendance.getCourse_id());
+            map.put("teacher_id", attendance.getTeacher_id());
+            map.put("serial_number", attendance.getSerial_number());
+            map.put("type",""+type);
+            OkHttp.Response response = OkHttp.httpGetForm("http://192.168.137.1/mgr/student/", map);
+            Map content = (Map) JSONObject.parse(response.content);
+            String string = Objects.requireNonNull(content.get("data")).toString();
+            Log.e("StudentSign",string);
+            setResult(0,new Intent());
+            finish();
+        }).start();
+    }
+
+    private void getPhotoFromAlbum() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            openAlbum();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 1){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openAlbum();
+            } else {
+                Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);
+    }
+
+    private void handleImageOnKitKat(Intent data) {
+        String imagesPath = null;
+        Uri uri = data.getData();
+        assert uri != null;
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            //如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagesPath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            }
+        }
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagesPath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagesPath = uri.getPath();
+        }
+        displayImage(imagesPath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        //通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+    private void displayImage(String imagesPath) {
+        Bitmap bitmap = BitmapFactory.decodeFile(imagesPath);
+        Bitmap compressBitmap = Picture.compressBitmap(bitmap);
+        bitmapSaveToNative(compressBitmap);
+        try {
+            imageView.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri)));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

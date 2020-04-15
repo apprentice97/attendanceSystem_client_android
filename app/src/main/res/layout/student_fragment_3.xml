@@ -3,11 +3,68 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/studentName"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
+<!--    <com.example.attendancesystem_client_android.CircleImageView-->
+<!--        android:id="@+id/portrait"-->
+<!--        android:layout_height="180dp"-->
+<!--        android:layout_width="180dp"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:src="@drawable/me"-->
+<!--        />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
+    <ImageView
+        android:id="@+id/portrait"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="This is my portrait!"
+        android:background="@drawable/me"/>
+    <LinearLayout
+        android:layout_margin="50dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/student_id"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#000000"/>
+        <TextView
+            android:id="@+id/student_name"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#000000"/>
+        <TextView
+            android:id="@+id/student_class_id"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#000000"/>
+    </LinearLayout>
 
 </LinearLayout>
