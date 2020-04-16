@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.ToastChildThread;
 import com.example.attendancesystem_client_android.bean.Attendance;
 import com.example.attendancesystem_client_android.bean.Course;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
@@ -115,7 +118,8 @@ public class StudentFragment1 extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(0 == resultCode) {
+        if(1 == resultCode) {
+            Toast.makeText(getContext(), "恭喜您，签到成功！", Toast.LENGTH_SHORT).show();
             draw();
         }
         else{

@@ -2,53 +2,46 @@ package com.example.attendancesystem_client_android.student;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
-import com.example.attendancesystem_client_android.MainActivity;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.Picture;
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.ToastChildThread;
 import com.example.attendancesystem_client_android.bean.Attendance;
-import com.example.attendancesystem_client_android.bean.Course;
-
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +56,9 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
     private ImageView imageView;
     private Uri imageUri = null;
     private Boolean takenPhoto;
+    private AlertDialog alert = null;
+    private AlertDialog.Builder builder = null;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +70,7 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void bindView(){
+        mContext = StudentSignIn.this;
         ArrayList<String> list = new ArrayList<>();
         list.add("出勤");
         list.add("病假");
@@ -217,10 +214,15 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
             OkHttp.Response response = OkHttp.httpPostForm("http://192.168.137.1/mgr/student/", map, imageUri.getPath());
             assert response != null;
             Map content = (Map) JSONObject.parse(response.content);
-            String string = Objects.requireNonNull(content.get("data")).toString();
-            Log.e("StudentSign",string);
-            setResult(0,new Intent());
-            finish();
+            String code = Objects.requireNonNull(content.get("ret")).toString();
+            Log.e("StudentSignIn", code);
+            if(code.equals("0")){
+                setResult(1,new Intent());
+                finish();
+            }
+            else if(code.equals("1")){
+                ToastChildThread.show(mContext, "人脸识别失败，请重新识别！", Toast.LENGTH_SHORT);
+            }
         }).start();
     }
 
