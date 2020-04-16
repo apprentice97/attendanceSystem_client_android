@@ -49,9 +49,9 @@ public class StudentFragment3 extends Fragment implements View.OnClickListener{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                studentId.setText(GlobalVariable.getInstance().getAccount());
-                studentName.setText(GlobalVariable.getInstance().getStudent_name());
-                studentClassId.setText(GlobalVariable.getInstance().getStudent_class_id());
+                studentId.setText("             学号：     " + GlobalVariable.getInstance().getAccount());
+                studentName.setText("             姓名：     " + GlobalVariable.getInstance().getStudent_name());
+                studentClassId.setText("             班级：     " + GlobalVariable.getInstance().getStudent_class_id());
             }
         }).start();
     }
