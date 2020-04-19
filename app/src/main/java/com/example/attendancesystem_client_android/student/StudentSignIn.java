@@ -223,6 +223,9 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
             else if(code.equals("1")){
                 ToastChildThread.show(mContext, "人脸识别失败，请重新识别！", Toast.LENGTH_SHORT);
             }
+            else if(code.equals("2")){
+                ToastChildThread.show(mContext, "超过签到时间了！", Toast.LENGTH_SHORT);
+            }
         }).start();
     }
 

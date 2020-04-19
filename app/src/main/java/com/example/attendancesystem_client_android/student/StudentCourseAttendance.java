@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +15,6 @@ import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.bean.Attendance;
-import com.example.attendancesystem_client_android.bean.AttendanceStatistics;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
 import com.example.attendancesystem_client_android.recyclerView.MyRecyclerAdapter;
 

@@ -43,9 +43,7 @@
             android:layout_height="60dp"
             android:background="#FCFCFC"/>
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#000000"/>
+            style="@style/a_line_view"/>
         <TextView
             android:id="@+id/student_name"
             android:textColor="@android:color/black"
@@ -57,9 +55,7 @@
             android:layout_height="60dp"
             android:background="#FCFCFC"/>
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#000000"/>
+            style="@style/a_line_view"/>
         <TextView
             android:id="@+id/student_class_id"
             android:textColor="@android:color/black"
@@ -71,9 +67,7 @@
             android:layout_height="60dp"
             android:background="#FCFCFC"/>
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#000000"/>
+            style="@style/a_line_view"/>
     </LinearLayout>
 
 </LinearLayout>

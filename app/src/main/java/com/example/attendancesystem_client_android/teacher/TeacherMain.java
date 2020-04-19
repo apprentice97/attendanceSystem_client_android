@@ -27,7 +27,7 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
     private RadioButton rb1;
     private RadioButton rb2;
     private ViewPager vPager;
-    private TextView textView;
+    private TextView myActionBar;
 
     private TeacherFragmentPagerAdapter mAdapter;
     private List<Fragment> fragments;
@@ -64,7 +64,7 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
         rb0 =  findViewById(R.id.rb0);
         rb1 = findViewById(R.id.rb1);
         rb2 =  findViewById(R.id.rb2);
-        textView = findViewById(R.id.textView);
+         myActionBar = findViewById(R.id.my_action_bar);
     }
 
     @Override
@@ -72,15 +72,15 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
         switch (checkedId) {
             case R.id.rb0:
                 vPager.setCurrentItem(PAGE_ONE);
-                textView.setText("老师的消息");
+                myActionBar.setText("消  息");
                 break;
             case R.id.rb1:
                 vPager.setCurrentItem(PAGE_TWO);
-                textView.setText("老师的课程");
+                myActionBar.setText("课  程");
                 break;
             case R.id.rb2:
                 vPager.setCurrentItem(PAGE_THREE);
-                textView.setText("老师的我的");
+                myActionBar.setText("我  的");
                 break;
         }
     }

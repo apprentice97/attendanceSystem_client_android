@@ -19,10 +19,22 @@ public class GlobalVariable{
     private int student_course_id;
     private int student_position;
     private List<Attendance> student_message;
-
     private File file;
     private String student_name;
     private String student_class_id;
+    private String teacher_name;
+    private List<Attendance> application_for_leave;
+    private int application_for_leave_position;
+    private List<Attendance> teacher_check;
+    private int teacher_check_position;
+
+    public String getTeacher_name() {
+        return teacher_name;
+    }
+
+    public void setTeacher_name(String teacher_name) {
+        this.teacher_name = teacher_name;
+    }
 
     public String getStudent_name() {
         return student_name;
@@ -134,5 +146,37 @@ public class GlobalVariable{
 
     public String getUrlTeacher() {
         return "http://192.168.137.1/mgr/teacher/";
+    }
+
+    public List<Attendance> getApplication_for_leave() {
+        return application_for_leave;
+    }
+
+    public void setApplication_for_leave(List<Attendance> application_for_leave) {
+        this.application_for_leave = application_for_leave;
+    }
+
+    public int getApplication_for_leave_position() {
+        return application_for_leave_position;
+    }
+
+    public void setApplication_for_leave_position(int application_for_leave_position) {
+        this.application_for_leave_position = application_for_leave_position;
+    }
+
+    public List<Attendance> getTeacher_check() {
+        return teacher_check;
+    }
+
+    public void setTeacher_check(List<Attendance> teacher_check) {
+        this.teacher_check = teacher_check;
+    }
+
+    public int getTeacher_check_position() {
+        return teacher_check_position;
+    }
+
+    public void setTeacher_check_position(int teacher_check_position) {
+        this.teacher_check_position = teacher_check_position;
     }
 }

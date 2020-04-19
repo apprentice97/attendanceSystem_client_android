@@ -125,7 +125,6 @@ public class StudentFragment1 extends Fragment implements View.OnClickListener{
         else{
             Log.e("StudentFragment1", "no resultCode == " + requestCode);
         }
-
     }
 
     @Deprecated

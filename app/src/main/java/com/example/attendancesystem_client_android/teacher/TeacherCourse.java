@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TeacherCourse extends AppCompatActivity implements View.OnClickListener{
+public class TeacherCourse extends AppCompatActivity{
     private View view;
     private RecyclerView recyclerView;
     private MyRecyclerAdapter recyclerAdapter;
@@ -88,7 +88,9 @@ public class TeacherCourse extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
-
+    protected void onResume(){
+        super.onResume();
+        draw();
     }
+
 }

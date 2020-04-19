@@ -112,4 +112,41 @@ public class Attendance {
                 ", teacher_name='" + teacher_name + '\'' +
                 '}';
     }
+
+    public String toStudentInformation(){
+        String typeString = "";
+        if(modify.equals("0") || modify.equals("2")){
+            typeString = "缺勤";
+        }
+        else{
+            switch (type) {
+                case "0":
+                    typeString = "出勤";
+                    break;
+                case "1":
+                    typeString = "病假";
+                    break;
+                case "2":
+                    typeString = "事假";
+                    break;
+                case "3":
+                    typeString = "缺勤";
+                    break;
+            }
+        }
+        return getStudent_id() + "\t" + getStudent_name() + "\t" + typeString;
+    }
+
+    public String getReasonString(){
+        switch (type) {
+            case "0":
+                return "出勤";
+            case "1":
+                return "病假";
+            case "2":
+                return "事假";
+            default:
+                return "缺勤";
+        }
+    }
 }

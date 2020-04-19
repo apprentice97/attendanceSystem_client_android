@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,21 +19,26 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
-import com.example.attendancesystem_client_android.bean.AttendanceStatistics;
+import com.example.attendancesystem_client_android.bean.Attendance;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
 import com.example.attendancesystem_client_android.recyclerView.MyRecyclerAdapter;
+import com.example.attendancesystem_client_android.student.StudentSignIn;
 
+import java.security.AccessControlContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class TeacherCourseSpecific extends AppCompatActivity  implements View.OnClickListener{
+import static java.security.AccessController.getContext;
+
+public class TeacherCourseSpecific extends AppCompatActivity{
     private View view;
     private RecyclerView recyclerView;
     private MyRecyclerAdapter recyclerAdapter;
     private LinearLayoutManager linearLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +57,9 @@ public class TeacherCourseSpecific extends AppCompatActivity  implements View.On
         recyclerAdapter = new MyRecyclerAdapter(this, new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getApplicationContext(), "点击了第" + position + "项", Toast.LENGTH_LONG).show();
+                GlobalVariable.getInstance().setTeacher_check_position(position);
+                Intent intent = new Intent(TeacherCourseSpecific.this, TeacherModifyAttendance.class);
+                startActivityForResult(intent, 1);
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -69,10 +80,11 @@ public class TeacherCourseSpecific extends AppCompatActivity  implements View.On
                 assert response != null;
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
-                List<AttendanceStatistics> listClass = JSON.parseArray(string, AttendanceStatistics.class);
+                List<Attendance> listClass = JSON.parseArray(string, Attendance.class);
+                GlobalVariable.getInstance().setTeacher_check(listClass);
                 List<String> list = new ArrayList<>();
                 for(int i = 0; i < listClass.size(); i ++){
-                    list.add(listClass.get(i).toString());
+                    list.add(listClass.get(i).toStudentInformation());
                 }
                 recyclerAdapter.setDataString(list);
             }
@@ -80,7 +92,19 @@ public class TeacherCourseSpecific extends AppCompatActivity  implements View.On
     }
 
     @Override
-    public void onClick(View v) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(1 == resultCode) {
+            draw();
+        }
+        else{
+            Log.e("StudentFragment1", "no resultCode == " + requestCode);
+        }
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //draw();
     }
 }

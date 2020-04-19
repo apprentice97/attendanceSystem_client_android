@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             String student_class_id = Objects.requireNonNull(content.get("student_class_id")).toString();
                             GlobalVariable.getInstance().setStudent_name(student_name);
                             GlobalVariable.getInstance().setStudent_class_id(student_class_id);
-
                             startActivity(intent);
                         }
                         else if(code.equals("1")){
@@ -135,6 +134,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Map content = (Map) JSONObject.parse(response.content);
                         String code = Objects.requireNonNull(content.get("ret")).toString();
                         if(code.equals("0")){
+                            map = new HashMap<String, String>();
+                            map.put("action", "teacher_get_self_info");
+                            map.put("teacher_id", account);
+                            response = OkHttp.httpPostForm("http://192.168.137.1/mgr/teacher/", map);
+                            assert response != null;
+                            content = (Map) JSONObject.parse(response.content);
+                            String teacher_name = Objects.requireNonNull(content.get("teacher_name")).toString();
+                            GlobalVariable.getInstance().setTeacher_name(teacher_name);
+
                             startActivity(intent);
                         }
                         else if(code.equals("1")){
