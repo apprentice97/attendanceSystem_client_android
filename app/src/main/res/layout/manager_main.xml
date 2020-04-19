@@ -4,34 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:background="#D1D1D1"
+    <TextView
+        android:id="@+id/my_action_bar"
+        android:textSize="18sp"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:text="课程"
-                android:id="@+id/textView"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="18dp"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:background="#FFFFFFFF" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
+        android:layout_height="56dp"
+        android:background="#43CD80"/>
+    <View
+        android:id="@+id/div_tab_bar1"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/my_action_bar"/>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/div_tab_bar1"/>
+    <View
+        android:id="@+id/div_tab_bar2"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@id/vPager"/>
     <RadioGroup
         android:id="@+id/rg_tab_bar"
         android:layout_width="match_parent"
@@ -41,12 +35,12 @@
 
         <RadioButton
             android:id="@+id/rb0"
-            android:text="消息"
+            android:text="学生"
             style="@style/tab_menu_item" />
 
         <RadioButton
             android:id="@+id/rb1"
-            android:text="课程"
+            android:text="老师"
             style="@style/tab_menu_item"/>
 
         <RadioButton
@@ -56,14 +50,4 @@
 
     </RadioGroup>
 
-    <View
-        android:id="@+id/div_tab_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_above="@id/rg_tab_bar" />
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/div_tab_bar"/>
 </RelativeLayout>
