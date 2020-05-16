@@ -60,6 +60,19 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#000000"/>
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/get_result"
+            android:text="点我获取考勤统计数据"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:background="@drawable/logout_selector"/>
+
     </LinearLayout>
 
 </LinearLayout>

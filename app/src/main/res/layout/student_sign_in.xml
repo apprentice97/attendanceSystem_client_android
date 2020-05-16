@@ -4,25 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <ImageView
-        android:text="相机预留位置！！！！！！！！！！！！"
-        android:id="@+id/camera"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
-    <TextView
-        android:id="@+id/course_information"
-        android:layout_below="@+id/camera"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-    <Spinner
-        android:id="@+id/type"
-        android:layout_below="@+id/course_information"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-    <Button
-        android:text="提交"
-        android:layout_below="@+id/type"
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/my_action_bar"
+            android:text="签 到"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#43CD80"/>
+        <TextView
+            android:textColor="#000000"
+            android:text="请选择出勤或请假前先点击下方拍照！"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+        <ImageView
+            android:id="@+id/camera"
+            android:layout_gravity="center"
+            android:layout_width="200dp"
+            android:layout_height="350dp"
+            android:background="@drawable/camera"/>
+<!--        <TextView-->
+<!--            android:id="@+id/course_information"-->
+<!--            android:layout_below="@+id/camera"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"/>-->
+<!--        <Spinner-->
+<!--            android:id="@+id/type"-->
+<!--            android:layout_below="@+id/course_information"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"/>-->
+        <Button
+            android:text="提交"
+            android:layout_below="@+id/type"
+            android:id="@+id/submit"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"/>
+    </LinearLayout>
+
 </RelativeLayout>

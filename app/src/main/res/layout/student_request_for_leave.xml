@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/my_action_bar"
+                android:text="请假"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#43CD80"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:text="序 号:"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:text="姓 名:"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:text="课 程:"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:text="时 间:"
+                            style="@style/list_item"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:editable="false"
+                            android:id="@+id/serial_number"
+                            android:text="这是第一个TextView"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:id="@+id/student"
+                            android:text="这是第二个TextView"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:id="@+id/course"
+                            android:text="这是第三个TextView"
+                            style="@style/list_item"/>
+                        <TextView
+                            android:id="@+id/time"
+                            android:text="这是第四个TextView"
+                            style="@style/list_item"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/sick_leave"
+                    android:checked="true"
+                    android:text="病假"
+                    style="@style/list_item"/>
+                <RadioButton
+                    android:id="@+id/affair_leave"
+                    android:text="事假"
+                    style="@style/list_item"/>
+            </RadioGroup>
+            <Button
+                android:id="@+id/picture_file"
+                style="@style/list_item"
+               android:text="选择文件上传"/>
+            <!--        <TextView-->
+            <!--            android:id="@+id/course_information"-->
+            <!--            android:layout_below="@+id/camera"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="50dp"/>-->
+            <!--        <Spinner-->
+            <!--            android:id="@+id/type"-->
+            <!--            android:layout_below="@+id/course_information"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="50dp"/>-->
+            <Button
+                android:text="提交"
+                android:id="@+id/submit"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

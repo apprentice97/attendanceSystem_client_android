@@ -105,7 +105,6 @@ public class TeacherRecyclerAdapter2 extends RecyclerView.Adapter<TeacherRecycle
                     @Override
                     public void run() {
                         int position = viewHolder.getPosition();
-                        Log.e("TeacherReadapter2", "点名");
                         GlobalVariable.getInstance().getCourse().get(position).getCourse_id();
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("action", "call_name");

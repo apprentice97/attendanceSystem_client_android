@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -35,6 +36,7 @@ public class TeacherCourse extends AppCompatActivity{
     private RecyclerView recyclerView;
     private MyRecyclerAdapter recyclerAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private TextView my_action_bar;
 
 
     @Override
@@ -63,12 +65,16 @@ public class TeacherCourse extends AppCompatActivity{
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new Decoration(this, OrientationHelper.VERTICAL));
+        my_action_bar = findViewById(R.id.my_action_bar);
     }
 
     private void draw(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                String action_bar_strings = GlobalVariable.getInstance().getCourse().get(GlobalVariable.getInstance().getTeacher_course_id()).getCourse_id();
+                action_bar_strings  = action_bar_strings + " " + GlobalVariable.getInstance().getCourse().get(GlobalVariable.getInstance().getTeacher_course_id()).getName();
+                my_action_bar.setText(action_bar_strings);
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("action", "course_attendance");
                 map.put("teacher_id", GlobalVariable.getInstance().getAccount());

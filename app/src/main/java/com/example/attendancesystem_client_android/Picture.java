@@ -94,7 +94,7 @@ public class Picture {
         }
 
         //设置缩放比
-        int radio = 8;
+        int radio = 1;
         Bitmap result = Bitmap.createBitmap(bitmap.getWidth() / radio, bitmap.getHeight() / radio, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(result);
         RectF rectF = new RectF(0, 0, bitmap.getWidth() / radio, bitmap.getHeight() / radio);

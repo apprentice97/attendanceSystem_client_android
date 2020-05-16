@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,11 +34,14 @@ public class TeacherApprovalOfLeave extends AppCompatActivity  implements View.O
     private Button approve;
     private Attendance attendance;
     private Activity mActivity;
+    private TextView time;
+    private WebView webView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.teacher_approval_of_leave);
         bindView();
         draw();
@@ -53,23 +57,21 @@ public class TeacherApprovalOfLeave extends AppCompatActivity  implements View.O
         approve = findViewById(R.id.approve);
         reject.setOnClickListener(this);
         approve.setOnClickListener(this);
+        time= findViewById(R.id.time);
         mActivity = this;
+        webView = findViewById(R.id.webView);
     }
 
     private void draw(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                attendance = GlobalVariable.getInstance().getApplication_for_leave().get(GlobalVariable.getInstance().getApplication_for_leave_position());
-                courseId.setText("          课程号：" + attendance.getCourse_id());
-                serialNumber.setText("          点名：第" + attendance.getSerial_number()+"次");
-                studentId.setText("          学号：" + attendance.getStudent_id());
-                studentName.setText("          姓名：" + attendance.getStudent_name());
-                reason.setText("          原因：" + attendance.getReasonString());
-            }
-        }){
-
-        }.start();
+        attendance = GlobalVariable.getInstance().getApplication_for_leave().get(GlobalVariable.getInstance().getApplication_for_leave_position());
+        courseId.setText("          课程号：" + attendance.getCourse_id());
+        serialNumber.setText("          点名：第" + attendance.getSerial_number()+"次");
+        studentId.setText("          学号：" + attendance.getStudent_id());
+        studentName.setText("          姓名：" + attendance.getStudent_name());
+        reason.setText("          原因：" + attendance.getReasonString());
+        time.setText("          时间：" + attendance.getTime());
+        String picture_name = attendance.getSerial_number() + attendance.getStudent_id() + attendance.getTeacher_id() + attendance.getCourse_id();
+        webView.loadUrl("http://192.168.137.1/mgr/teacher/?action=request_image&picture_name=" + picture_name);
     }
 
     @Override

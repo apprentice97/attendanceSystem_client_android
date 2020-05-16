@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.attendancesystem_client_android.bean.Attendance;
 import com.example.attendancesystem_client_android.bean.Course;
+import com.example.attendancesystem_client_android.bean.Student;
+import com.example.attendancesystem_client_android.bean.Teacher;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +29,13 @@ public class GlobalVariable{
     private int application_for_leave_position;
     private List<Attendance> teacher_check;
     private int teacher_check_position;
+    private String teacher_email;
+    private int manager_teacher_position;
+    private List<Teacher> manager_teacher;
+    private int manager_student_position;
+    private List<Student> manager_student;
+    private List<Attendance> student_attendance;
+    private int student_attendance_position;
 
     public String getTeacher_name() {
         return teacher_name;
@@ -178,5 +187,61 @@ public class GlobalVariable{
 
     public void setTeacher_check_position(int teacher_check_position) {
         this.teacher_check_position = teacher_check_position;
+    }
+
+    public String getTeacher_email() {
+        return teacher_email;
+    }
+
+    public void setTeacher_email(String teacher_email) {
+        this.teacher_email = teacher_email;
+    }
+
+    public List<Teacher> getManager_teacher() {
+        return manager_teacher;
+    }
+
+    public void setManager_teacher(List<Teacher> manager_teacher) {
+        this.manager_teacher = manager_teacher;
+    }
+
+    public int getManager_teacher_position() {
+        return manager_teacher_position;
+    }
+
+    public void setManager_teacher_position(int manager_teacher_position) {
+        this.manager_teacher_position = manager_teacher_position;
+    }
+
+    public int getManager_student_position() {
+        return manager_student_position;
+    }
+
+    public void setManager_student_position(int manager_student_position) {
+        this.manager_student_position = manager_student_position;
+    }
+
+    public List<Student> getManager_student() {
+        return manager_student;
+    }
+
+    public void setManager_student(List<Student> manager_student) {
+        this.manager_student = manager_student;
+    }
+
+    public List<Attendance> getStudent_attendance() {
+        return student_attendance;
+    }
+
+    public void setStudent_attendance(List<Attendance> student_attendance) {
+        this.student_attendance = student_attendance;
+    }
+
+    public int getStudent_attendance_position() {
+        return student_attendance_position;
+    }
+
+    public void setStudent_attendance_position(int student_attendance_position) {
+        this.student_attendance_position = student_attendance_position;
     }
 }

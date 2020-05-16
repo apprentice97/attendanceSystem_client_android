@@ -81,6 +81,8 @@ public class ManagerFragment1 extends Fragment{
         recyclerAdapter = new MyRecyclerAdapter(getContext(), new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                GlobalVariable.getInstance().setManager_student_position(position);
+                startActivity(new Intent(getContext(), ManagerStudentModifyInfo.class));
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -100,6 +102,7 @@ public class ManagerFragment1 extends Fragment{
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
                 List<Student> listClass = JSON.parseArray(string, Student.class);
+                GlobalVariable.getInstance().setManager_student(listClass);
                 List<String> list = new ArrayList<>(toListString(listClass));
                 recyclerAdapter.setDataString(list);
             }
@@ -116,7 +119,7 @@ public class ManagerFragment1 extends Fragment{
     private List<String> toListString(List<Student> listClass){
         List<String> ret = new ArrayList<>();
         for(int i = 0; i < listClass.size(); i ++){
-            ret.add(listClass.get(i).getStudent_id() + "    " + listClass.get(i).getStudent_name() + "    密码：" + listClass.get(i).getPassword());
+            ret.add(listClass.get(i).getStudent_id() + "    " + listClass.get(i).getStudent_name());
         }
         return ret;
     }

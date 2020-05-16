@@ -1,5 +1,6 @@
 package com.example.attendancesystem_client_android.manager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.OkHttp;
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.bean.Student;
@@ -79,6 +81,8 @@ public class ManagerFragment2 extends Fragment{
         recyclerAdapter = new MyRecyclerAdapter(getContext(), new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                GlobalVariable.getInstance().setManager_teacher_position(position);
+                startActivity(new Intent(getContext(), ManagerTeacherModifyInfo.class));
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -98,6 +102,7 @@ public class ManagerFragment2 extends Fragment{
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
                 List<Teacher> listClass = JSON.parseArray(string, Teacher.class);
+                GlobalVariable.getInstance().setManager_teacher(listClass);
                 List<String> list = new ArrayList<>(toListString(listClass));
                 recyclerAdapter.setDataString(list);
             }
@@ -114,7 +119,7 @@ public class ManagerFragment2 extends Fragment{
     private List<String> toListString(List<Teacher> listClass){
         List<String> ret = new ArrayList<>();
         for(int i = 0; i < listClass.size(); i ++){
-            ret.add(listClass.get(i).getTeacher_id() + "    " + listClass.get(i).getTeacher_name() + "    密码：" + listClass.get(i).getPassword());
+            ret.add(listClass.get(i).getTeacher_id() + "    " + listClass.get(i).getTeacher_name());
         }
         return ret;
     }

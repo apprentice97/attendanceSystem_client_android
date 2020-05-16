@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -49,7 +50,8 @@ public class StudentCourseAttendance extends AppCompatActivity implements View.O
         recyclerAdapter = new MyRecyclerAdapter(this, new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                GlobalVariable.getInstance().setTeacher_course_serial(position + 1);
+                GlobalVariable.getInstance().setStudent_attendance_position(position);
+                startActivity(new Intent(StudentCourseAttendance.this, StudentRequestForLeave.class));
             }
         });
         recyclerView.setAdapter(recyclerAdapter);
@@ -70,6 +72,7 @@ public class StudentCourseAttendance extends AppCompatActivity implements View.O
                 Map content = (Map) JSONObject.parse(response.content);
                 String string = Objects.requireNonNull(content.get("data")).toString();
                 List<Attendance> listClass = JSON.parseArray(string, Attendance.class);
+                GlobalVariable.getInstance().setStudent_attendance(listClass);
                 List<String> list = new ArrayList<>(toListString(listClass));
                 recyclerAdapter.setDataString(list);
             }
@@ -91,8 +94,8 @@ public class StudentCourseAttendance extends AppCompatActivity implements View.O
         List<String> ret = new ArrayList<>();
         for(int i = 0; i < listClass.size(); i ++){
             String add = "";
-            if(listClass.get(i).getModify().equals("0")){
-                add = "未签到";
+            if(listClass.get(i).getModify().equals("0") || listClass.get(i).getModify().equals("2")){
+                add = "缺勤";
             }
             else if(listClass.get(i).getType().equals("0")){
                 add = "出勤";

@@ -21,49 +21,48 @@
             android:orientation="vertical">
             <EditText
                 android:id="@+id/et_account"
-                style="@style/login_control"
-                android:lines="1"
-                android:text="B16041735"
+                style="@style/list_item"
+                android:gravity="center_vertical|left"
+                android:singleLine="true"
                 android:hint="账号"/>
             <EditText
+                android:inputType="textPassword"
                 android:id="@+id/et_password"
-                style="@style/login_control"
-                android:lines="1"
-                android:text="123456"
+                style="@style/list_item"
+                android:gravity="center_vertical|left"
                 android:hint="密码"/>
-            <Button
-                android:id="@+id/btn_login"
-                style="@style/login_control"
-                android:text="登录"/>
-            <TextView
-                android:id="@+id/tv_register"
-                style="@style/login_control"
-                android:text="用户注册"/>
+
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rbStudent"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="学生"
                     android:checked="true"/>
 
                 <RadioButton
                     android:id="@+id/rbTeacher"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="教师"/>
                 <RadioButton
                     android:id="@+id/rbManager"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="管理员"/>
             </RadioGroup>
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:layout_width="150dp"
+                android:background="@drawable/login"
+                android:text="登 录"/>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

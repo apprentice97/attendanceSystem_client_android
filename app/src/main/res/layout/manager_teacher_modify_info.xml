@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEE9E9"
+    tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/my_action_bar"
+        android:text="修改老师信息"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#43CD80"/>
+    <LinearLayout
+
+        android:layout_marginTop="100dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="工 号:"
+                        style="@style/list_item"/>
+                    <TextView
+                        android:text="姓 名:"
+                        style="@style/list_item"/>
+                    <TextView
+                        android:text="密 码:"
+                        style="@style/list_item"/>
+                    <TextView
+                        android:text="邮 箱:"
+                        style="@style/list_item"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                    <EditText
+                        android:editable="false"
+                        android:id="@+id/teacher_id"
+                        android:text="这是第一个TextView"
+                        style="@style/list_item"/>
+                    <EditText
+                        android:id="@+id/teacher_name"
+                        android:text="这是第二个TextView"
+                        style="@style/list_item"/>
+                    <EditText
+                        android:id="@+id/teacher_password"
+                        android:text="这是第三个TextView"
+                        style="@style/list_item"/>
+                    <EditText
+                        android:id="@+id/teacher_email"
+                        android:text="这是第四个TextView"
+                        style="@style/list_item"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/back"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="返回"
+                    style="@style/list_item"/>
+                <Button
+                    android:id="@+id/modify"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="修改"
+                    style="@style/list_item"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -23,6 +24,8 @@ import com.example.attendancesystem_client_android.bean.Attendance;
 import com.example.attendancesystem_client_android.recyclerView.Decoration;
 import com.example.attendancesystem_client_android.recyclerView.MyRecyclerAdapter;
 import com.example.attendancesystem_client_android.student.StudentSignIn;
+
+import org.w3c.dom.Text;
 
 import java.security.AccessControlContext;
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class TeacherCourseSpecific extends AppCompatActivity{
     private RecyclerView recyclerView;
     private MyRecyclerAdapter recyclerAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private TextView my_action_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class TeacherCourseSpecific extends AppCompatActivity{
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new Decoration(this, OrientationHelper.VERTICAL));
+        my_action_bar = findViewById(R.id.my_action_bar);
     }
 
     private void draw(){
@@ -87,6 +92,8 @@ public class TeacherCourseSpecific extends AppCompatActivity{
                     list.add(listClass.get(i).toStudentInformation());
                 }
                 recyclerAdapter.setDataString(list);
+                Attendance attendance = listClass.get(0);
+                my_action_bar.setText( attendance.getCourse_id() + attendance.getCourse_name() + " 第" + attendance.getSerial_number() + "次点名");
             }
         }).start();
     }

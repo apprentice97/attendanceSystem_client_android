@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText et_account;
     EditText et_password;
     Button btn_login;
-    TextView tv_register;
     RadioButton rb_student;
     RadioButton rb_teacher;
     RadioButton rb_manager;
@@ -46,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_login.setOnClickListener(this);
         et_account = findViewById(R.id.et_account);
         et_password = findViewById(R.id.et_password);
-        tv_register = findViewById(R.id.tv_register);
-        tv_register.setOnClickListener(this);
         rb_student = findViewById(R.id.rbStudent);
         rb_teacher = findViewById(R.id.rbTeacher);
         rb_manager = findViewById(R.id.rbManager);
@@ -57,11 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if(view == btn_login){
             login();
-        }
-        else if(view == tv_register){
-            Intent intent = new Intent("android.intent.action.MAIN");
-            intent.setClass(MainActivity.this, Register.class);
-            //startActivity(intent);
         }
     }
 
@@ -141,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             assert response != null;
                             content = (Map) JSONObject.parse(response.content);
                             String teacher_name = Objects.requireNonNull(content.get("teacher_name")).toString();
+                            String teacher_email = Objects.requireNonNull(content.get("teacher_email")).toString();
                             GlobalVariable.getInstance().setTeacher_name(teacher_name);
+                            GlobalVariable.getInstance().setTeacher_email(teacher_email);
 
                             startActivity(intent);
                         }

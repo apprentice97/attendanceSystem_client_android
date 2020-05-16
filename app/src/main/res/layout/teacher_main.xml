@@ -35,7 +35,7 @@
 
         <RadioButton
             android:id="@+id/rb0"
-            android:text="消息"
+            android:text="假条"
             style="@style/tab_menu_item" />
 
         <RadioButton

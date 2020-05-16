@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".teacher.TeacherModifyAttendance"></activity>
+        <activity android:name=".student.StudentRequestForLeave"></activity>
+        <activity android:name=".manager.ManagerStudentModifyInfo" />
+        <activity android:name=".manager.ManagerTeacherModifyInfo" />
+        <activity android:name=".teacher.TeacherModifyAttendance" />
         <activity android:name=".teacher.TeacherApprovalOfLeave" />
         <activity android:name=".student.StudentSignIn" />
         <activity android:name=".student.StudentCourseAttendance" />
@@ -23,7 +26,6 @@
         <activity android:name=".teacher.TeacherCourse" />
         <activity android:name=".manager.ManagerMain" />
         <activity android:name=".teacher.TeacherMain" />
-        <activity android:name=".Register" />
         <activity android:name=".student.StudentMain" />
         <activity android:name=".MainActivity">
             <intent-filter>

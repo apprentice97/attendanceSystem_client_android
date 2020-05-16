@@ -68,7 +68,7 @@ public class StudentMain extends AppCompatActivity implements RadioGroup.OnCheck
         switch (checkedId) {
             case R.id.rb0:
                 vPager.setCurrentItem(PAGE_ONE);
-                myActionBar.setText("消  息");
+                myActionBar.setText("签 到");
                 break;
             case R.id.rb1:
                 vPager.setCurrentItem(PAGE_TWO);

@@ -47,10 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class StudentSignIn extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
-    private TextView textView;
-    private Spinner spinner_type;
-    private ArrayAdapter<String> spinner_type_adapter;
+public class StudentSignIn extends AppCompatActivity implements View.OnClickListener {
     private Button submit;
     private int type;
     private ImageView imageView;
@@ -76,26 +73,16 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
         list.add("病假");
         list.add("事假");
         list.add("缺勤");
-        textView = findViewById(R.id.course_information);
-        spinner_type = findViewById(R.id.type);
-        spinner_type_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        spinner_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_type.setAdapter(spinner_type_adapter);
-        spinner_type.setOnItemSelectedListener(this);
         submit = findViewById(R.id.submit);
         submit.setOnClickListener(this);
         imageView = findViewById(R.id.camera);
         imageView.setOnClickListener(this);
-        //spinner_type.setOnItemClickListener(this);
     }
     private void draw(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Attendance attendance = GlobalVariable.getInstance().getStudent_message().get(GlobalVariable.getInstance().getStudent_position());
-                String text = "课程号:" +  attendance.getCourse_id() + "    课程名:" + attendance.getCourse_name() + "    第" +
-                        attendance.getSerial_number() + "次点名";
-                textView.setText(text);
             }
         });
     }
@@ -103,35 +90,20 @@ public class StudentSignIn extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onClick(View v) {
         if(v == submit){
-            if(type == 0){
-                if(takenPhoto){
-                    attendanceWithPhoto();
-                }
-                else{
-                    Toast.makeText(this, "请先拍照!", Toast.LENGTH_SHORT).show();
-                }
+            if(takenPhoto){
+                attendanceWithPhoto();
             }
             else{
-                attendanceWithOutPhoto();
+                Toast.makeText(this, "请先拍照!", Toast.LENGTH_SHORT).show();
             }
         }
         else if(v == imageView){
             createUploadFile();
-//            takePhoto();
+            takePhoto();
             // todo 改成从相机选择照片
-            takenPhoto = true;
-            getPhotoFromAlbum();
+//            takenPhoto = true;
+//            getPhotoFromAlbum();
         }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        type = position;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        type = 0;
     }
 
     @Override
