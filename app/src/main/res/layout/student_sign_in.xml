@@ -18,7 +18,7 @@
             android:background="#43CD80"/>
         <TextView
             android:textColor="#000000"
-            android:text="请选择出勤或请假前先点击下方拍照！"
+            android:text="请先点击下方拍照！"
             android:textSize="18sp"
             android:gravity="center"
             android:layout_width="match_parent"

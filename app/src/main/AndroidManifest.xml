@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".student.StudentRequestForLeave"></activity>
+        <activity android:name=".manager.ManagerModifyPassword"></activity>
+        <activity android:name=".teacher.TeacherModifyPassword" />
+        <activity android:name=".student.StudentModifyPassword" />
+        <activity android:name=".student.StudentRequestForLeave" />
         <activity android:name=".manager.ManagerStudentModifyInfo" />
         <activity android:name=".manager.ManagerTeacherModifyInfo" />
         <activity android:name=".teacher.TeacherModifyAttendance" />

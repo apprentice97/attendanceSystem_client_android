@@ -60,6 +60,7 @@ public class StudentSignIn extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.student_sign_in);
         takenPhoto=false;
         bindView();

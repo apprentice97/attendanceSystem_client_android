@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.R;
 
 import java.util.ArrayList;
@@ -31,10 +33,12 @@ public class ManagerMain extends AppCompatActivity implements RadioGroup.OnCheck
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
+    private boolean firstInstallActivity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firstInstallActivity = true;
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.manager_main);
@@ -52,6 +56,10 @@ public class ManagerMain extends AppCompatActivity implements RadioGroup.OnCheck
         vPager.addOnPageChangeListener(this);
         rb1.setChecked(true);
         vPager.setCurrentItem(1);
+        if(firstInstallActivity && GlobalVariable.getInstance().getPassword().equals("123456")){
+            firstInstallActivity = false;
+            startActivity(new Intent(ManagerMain.this, ManagerModifyPassword.class));
+        }
     }
 
     private void bindViews() {

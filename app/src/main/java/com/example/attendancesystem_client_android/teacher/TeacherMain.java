@@ -1,5 +1,6 @@
 package com.example.attendancesystem_client_android.teacher;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.R;
 import com.example.attendancesystem_client_android.teacher.TeacherFragment1;
 import com.example.attendancesystem_client_android.teacher.TeacherFragment2;
@@ -28,6 +30,7 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
     private RadioButton rb2;
     private ViewPager vPager;
     private TextView myActionBar;
+    private Boolean firstInstallActivity;
 
     private TeacherFragmentPagerAdapter mAdapter;
     private List<Fragment> fragments;
@@ -39,6 +42,7 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firstInstallActivity = true;
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.teacher_main);
@@ -56,6 +60,10 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
         vPager.addOnPageChangeListener(this);
         rb1.setChecked(true);
         vPager.setCurrentItem(1);
+        if(firstInstallActivity && GlobalVariable.getInstance().getPassword().equals("123456")){
+            firstInstallActivity = false;
+            startActivity(new Intent(TeacherMain.this, TeacherModifyPassword.class));
+        }
     }
 
     private void bindViews() {
@@ -64,7 +72,7 @@ public class TeacherMain extends AppCompatActivity implements RadioGroup.OnCheck
         rb0 =  findViewById(R.id.rb0);
         rb1 = findViewById(R.id.rb1);
         rb2 =  findViewById(R.id.rb2);
-         myActionBar = findViewById(R.id.my_action_bar);
+        myActionBar = findViewById(R.id.my_action_bar);
     }
 
     @Override

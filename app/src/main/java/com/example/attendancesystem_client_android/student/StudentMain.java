@@ -1,5 +1,6 @@
 package com.example.attendancesystem_client_android.student;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -9,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.attendancesystem_client_android.GlobalVariable;
 import com.example.attendancesystem_client_android.R;
+import com.example.attendancesystem_client_android.manager.ManagerStudentModifyInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class StudentMain extends AppCompatActivity implements RadioGroup.OnCheck
     private RadioButton rb2;
     private ViewPager vPager;
     private TextView myActionBar;
+    private boolean firstInstallActivity;
 
     private StudentFragmentPagerAdapter mAdapter;
     private List<Fragment> fragments;
@@ -35,6 +39,7 @@ public class StudentMain extends AppCompatActivity implements RadioGroup.OnCheck
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firstInstallActivity = true;
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.student_main);
@@ -52,6 +57,10 @@ public class StudentMain extends AppCompatActivity implements RadioGroup.OnCheck
         vPager.addOnPageChangeListener(this);
         rb1.setChecked(true);
         vPager.setCurrentItem(1);
+        if(firstInstallActivity &&GlobalVariable.getInstance().getPassword().equals("123456")){
+            firstInstallActivity = false;
+            startActivity(new Intent(StudentMain.this, StudentModifyPassword.class));
+        }
     }
 
     private void bindViews() {
